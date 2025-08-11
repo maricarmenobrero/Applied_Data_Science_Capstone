@@ -24,22 +24,22 @@ Final dataset for Capstone **Lab 1** (SpaceX Falcon 9). It consolidates past lau
 | Column           | Type      | Description                                                             | Example                  |
 |------------------|-----------|-------------------------------------------------------------------------|--------------------------|
 | `FlightNumber`   | int       | Sequential flight index per program                                     | `96`                     |
-| `Date`           | date/str  | UTC launch date                                                         | `2019-05-24`            |
-| `BoosterVersion` | str       | Falcon 9 block/booster version                                          | `Falcon 9 Block 5`      |
-| `PayloadMass`    | float     | Payload mass in kg (mean-imputed if missing)                            | `13120.0`               |
-| `Orbit`          | str       | Target orbit (e.g., `LEO`, `GTO`, `SSO`)                                | `LEO`                    |
-| `LaunchSite`     | str       | Launch site short name                                                  | `CCAFS LC-40`           |
-| `Outcome`        | str       | Text status for first-stage attempt/result (e.g., `True ASDS`)          | `True ASDS`             |
-| `Flights`        | int       | Number of flights of the same booster                                   | `3`                      |
-| `GridFins`       | bool/int  | Grid fins used (1/0 or True/False)                                      | `1`                      |
-| `Reused`         | bool/int  | Booster reused                                                          | `1`                      |
-| `Legs`           | bool/int  | Landing legs deployed                                                   | `1`                      |
-| `LandingPad`     | str/NULL  | Landing pad ID or `NULL` if not used                                    | `LZ-1` / `NULL`         |
-| `Block`          | int       | Falcon 9 block number                                                   | `5`                      |
-| `ReusedCount`    | int       | Times the booster has been reused                                       | `2`                      |
-| `Serial`         | str       | Booster serial                                                          | `B1056`                 |
-| `Longitude`      | float     | Launch longitude                                                        | `-80.5772`              |
-| `Latitude`       | float     | Launch latitude                                                         | `28.5619`               |
+| `Date`           | date (parsed from str)  | UTC launch date                                                         | `2019-05-24`            |
+| `BoosterVersion` | object       | Falcon 9 block/booster version                                          | `Falcon 9 Block 5`      |
+| `PayloadMass`    | float64     | Payload mass in kg (mean-imputed if missing)                            | `13120.0`               |
+| `Orbit`          | object       | Target orbit (e.g., `LEO`, `GTO`, `SSO`)                                | `LEO`                    |
+| `LaunchSite`     | object       | Launch site short name                                                  | `CCAFS LC-40`           |
+| `Outcome`        | object       | Text status for first-stage attempt/result (e.g., `True ASDS`)          | `True ASDS`             |
+| `Flights`        | int64       | Number of flights of the same booster                                   | `3`                      |
+| `GridFins`       | bool  | Grid fins used (`True`/`False`)                                      | `True`                      |
+| `Reused`         | bool  | Booster reused                                                          | `True`                      |
+| `Legs`           | bool  | Landing legs deployed                                                   | `True`                      |
+| `LandingPad`     | object/NULL  | Landing pad ID or `NULL` if not used                                    | `LZ-1` / `NULL`         |
+| `Block`          | float64       | Falcon 9 block number                                                   | `5`                      |
+| `ReusedCount`    | int64       | Times the booster has been reused                                       | `2`                      |
+| `Serial`         | object       | Booster serial                                                          | `B1056`                 |
+| `Longitude`      | float64     | Launch longitude                                                        | `-80.5772`              |
+| `Latitude`       | float64     | Launch latitude                                                         | `28.5619`               |
 
 **Attribution & license**  
 - SpaceX API data courtesy of SpaceX.  
