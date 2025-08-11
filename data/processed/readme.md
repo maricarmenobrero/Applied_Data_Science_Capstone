@@ -18,7 +18,6 @@ Final dataset for Capstone **Lab 1** (SpaceX Falcon 9). It consolidates past lau
 
 **Intended use**  
 - EDA (SQL/plots), feature engineering, and as input to classification models (Logistic Regression, SVM, Decision Tree, KNN).  
-- The label is a binary outcome (`Class`: 0 = did **not** land, 1 = **landed**).
 
 **Schema (core columns)**
 
