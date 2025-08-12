@@ -58,9 +58,7 @@ PRs and issues welcome! Ideas:
 
 - Improve `PayloadMass` imputation strategy
 
+## Reproducibility
 
-
-
-# Reproducibility
-- See notebooks under `labs/` (e.g., `01_data_collection.ipynb`, `02_data_wrangling.ipynb`) for code that fetches and builds this dataset.  
+- See notebook under `labs/jupyter-labs-spacex-data-collection-api.ipynb` for code that fetches and builds this dataset.  
 
