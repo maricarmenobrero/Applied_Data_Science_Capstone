@@ -62,3 +62,54 @@ PRs and issues welcome! Ideas:
 
 - See notebook under `labs/jupyter-labs-spacex-data-collection-api.ipynb` for code that fetches and builds this dataset.  
 
+
+# `processed/spacex_web_scraped.csv`
+
+## Description
+
+A clean CSV with historical SpaceX launch data scraped from Wikipedia as part of a web-scraping lab. It includes flight number, date/time, vehicle/booster, launch site, payload details, orbit, customer, and launch/landing outcomes.
+
+## Schema (columns)
+
+| Column            | Description                                                                          |
+| ----------------- | ------------------------------------------------------------------------------------ |
+| `Flight No.`      | Sequential flight identifier (as shown on the source page).                          |
+| `Date`            | Launch date (string, as displayed on the page; not timezone-normalized).             |
+| `Time`            | Launch time (string; may be local/UTC as per source and sometimes empty).            |
+| `Version Booster` | Vehicle/booster version (e.g., *Falcon 9 Block 5*, *Falcon Heavy*).                  |
+| `Launch site`     | Launch complex (e.g., *CCSFS SLC-40*, *KSC LC-39A*, *VAFB SLC-4E*).                  |
+| `Payload`         | Payload name/mission label.                                                          |
+| `Payload mass`    | Payload mass in kilograms when available; missing values are left blank/NaN.         |
+| `Orbit`           | Target orbit (e.g., *LEO*, *GTO*, *SSO*, *Mars transfer*).                           |
+| `Customer`        | Launch customer / operator.                                                          |
+| `Launch outcome`  | Outcome of the launch (e.g., *Success*, *Partial failure*, *Failure*).               |
+| `Booster landing` | Landing result/status (e.g., *ASDS—Success*, *RTLS—Success*, *Expended*, *Failure*). |
+
+
+> **Notes**:<br>
+> - Dates/times are kept as strings exactly as found.
+> - Payload masses are already normalized to kg where provided.
+> - Some cells may be empty due to missing or ambiguous source data.
+> - This CSV is the direct output of **Lab 2** from the **Applied Data Science Capstone** from IBM (web scraping module).
+
+## How this dataset was built
+
+- **Source**: Public Wikipedia launch list pages for SpaceX missions.
+
+- **Method**: HTML parsing with BeautifulSoup, extracting table rows labeled as launches and mapping each cell to the schema above. Basic helpers handled date/time parsing, payload mass normalization (kg), and landing outcome strings.
+
+- **Environment**: Python (BeautifulSoup4, pandas, requests/`html5lib` or `lxml`).
+
+## Known limitations
+
+- Wikipedia tables evolve; historical edits and formatting changes can introduce gaps or mismatches.
+
+- Timezones are not harmonized; treat `Time` as display text unless you normalize externally.
+
+- Some complex missions (rideshares, dual-stacks) may have multiple payload lines on source pages—only the primary line may be captured.
+
+## License & attribution
+
+- **Data attribution**: Derived from Wikipedia contributors’ launch list pages.
+
+- **License**: Follow Wikipedia’s content licensing for downstream use. If you publish derivatives, include appropriate attribution to Wikipedia contributors and note modifications.
