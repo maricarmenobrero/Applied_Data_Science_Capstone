@@ -1,50 +1,66 @@
-### `processed/dataset_part_1.csv`
+# `processed/dataset_part_1.csv`
 
-**Description**  
-Final dataset for Capstone **Lab 1** (SpaceX Falcon 9). It consolidates past launch records to support EDA and binary classification of first-stage landing outcomes.
+## Description  
+Final dataset for Capstone **Lab 1** (SpaceX Falcon 9). A cleaned, analysis-ready dataset with information on Falcon 9 launches.
 
-**Provenance**  
-- SpaceX REST API v4 (e.g., `/launches/past`, with lookups to `/rockets`, `/cores`, `/launchpads`, `/payloads`).  
-- Supplemented by web-scraped Wikipedia tables (Falcon 9 launch records) using BeautifulSoup where applicable.
+This file was created during a data lab (**Lab 1**): we started from a broader launch list, filtered out Falcon 1, reindexed flights, and filled a few missing values.
 
-**Wrangling steps (summary)**  
-- Filter **Falcon 1** out (keep **Falcon 9** only).  
-- Normalize nested JSON → flat table (e.g., `pandas.json_normalize`).  
-- Resolve foreign keys (IDs) to human-readable fields (rocket, core, launchpad, payload).  
-- Handle missing values:
-  - `PayloadMass`: imputed with the **mean**.
-  - `LandingPad`: left as `NULL` when no landing pad was used (to be handled later via one-hot encoding).
-- Type casting and light renaming for clarity.
+> **Size**: ~90 rows (≈2010–2020) · **File**: dataset_part_1.csv
 
-**Intended use**  
-- EDA (SQL/plots), feature engineering, and as input to classification models (Logistic Regression, SVM, Decision Tree, KNN).  
+## What’s inside?
 
-**Schema (core columns)**
+- **Resolve foreign keys** (IDs) to human-readable fields (rocket, core, launchpad, payload).
 
-| Column           | Type      | Description                                                             | Example                  |
-|------------------|-----------|-------------------------------------------------------------------------|--------------------------|
-| `FlightNumber`   | int       | Sequential flight index per program                                     | `96`                     |
-| `Date`           | date (parsed from str)  | UTC launch date                                                         | `2019-05-24`            |
-| `BoosterVersion` | object       | Falcon 9 block/booster version                                          | `Falcon 9 Block 5`      |
-| `PayloadMass`    | float64     | Payload mass in kg (mean-imputed if missing)                            | `13120.0`               |
-| `Orbit`          | object       | Target orbit (e.g., `LEO`, `GTO`, `SSO`)                                | `LEO`                    |
-| `LaunchSite`     | object       | Launch site short name                                                  | `CCAFS LC-40`           |
-| `Outcome`        | object       | Text status for first-stage attempt/result (e.g., `True ASDS`)          | `True ASDS`             |
-| `Flights`        | int64       | Number of flights of the same booster                                   | `3`                      |
-| `GridFins`       | bool  | Grid fins used (`True`/`False`)                                      | `True`                      |
-| `Reused`         | bool  | Booster reused                                                          | `True`                      |
-| `Legs`           | bool  | Landing legs deployed                                                   | `True`                      |
-| `LandingPad`     | object/NULL  | Landing pad ID or `NULL` if not used                                    | `LZ-1` / `NULL`         |
-| `Block`          | float64       | Falcon 9 block number                                                   | `5`                      |
-| `ReusedCount`    | int64       | Times the booster has been reused                                       | `2`                      |
-| `Serial`         | object       | Booster serial                                                          | `B1056`                 |
-| `Longitude`      | float64     | Launch longitude                                                        | `-80.5772`              |
-| `Latitude`       | float64     | Launch latitude                                                         | `28.5619`               |
+- **Falcon 9 only**: rows with `BoosterVersion == "Falcon 1"` were removed.
 
-**Attribution & license**  
+- **Reindexing**: `FlightNumber` was reset to 1…N after filtering.
+
+- **Basic imputation**: `NaN` values in `PayloadMass` were replaced with the **mean** of that column. `LandingPad` was left as `NaN` when no landing pad was used (to be handled later via one-hot encoding).
+
+- **No text normalization**: categorical fields remain as `object` (strings).
+
+## Data dictionary
+
+| Column           | Type                             | Description                                                | Examples / Notes                                    |
+| ---------------- | -------------------------------- | ---------------------------------------------------------- | --------------------------------------------------- |
+| `FlightNumber`   | `int64`                          | Sequential flight number (reindexed after filtering).      | 1, 2, …, 90                                         |
+| `Date`           | `date` (parsed from string) | Launch date (UTC).                                         | `2018-02-06`                                        |
+| `BoosterVersion` | `object`                         | Booster model/version.                                     | `Falcon 9 Block 5`, `Falcon 9 Full Thrust`          |
+| `PayloadMass`    | `float64`                        | Payload mass in kilograms. `NaN` imputed with column mean. | e.g., 6200.0                                        |
+| `Orbit`          | `object`                         | Target orbit.                                              | `LEO`, `ISS`, `GTO`, `SSO`                          |
+| `LaunchSite`     | `object`                         | Launch pad/site.                                           | `KSC LC-39A`, `CCAFS LC-40`, `VAFB SLC-4E`          |
+| `Outcome`        | `object`                         | Landing outcome (success + method).                        | `True ASDS`, `False ASDS`, `True RTLS`, `None None` |
+| `Flights`        | `float64`                        | Cumulative number of flights of the same core.             | 1.0–6.0                                             |
+| `GridFins`       | `bool`                           | Whether the booster used grid fins.                        | `True`/`False`                                      |
+| `Reused`         | `bool`                           | Whether the core was reused on this flight.                | `True`/`False`                                      |
+| `Legs`           | `bool`                           | Whether landing legs were deployed.                        | `True`/`False`                                      |
+| `LandingPad`     | `object`                         | Landing zone/drone ship.                                   | `OCISLY`, `JRTI-2`, `LZ-1`, `LZ-4`                  |
+| `Block`          | `float64`                        | Core Block version (if applicable).                        | 1.0–5.0                                             |
+| `ReusedCount`    | `float64`                        | Total reuse count of the core up to this launch.           | 0.0–5.0                                             |
+| `Serial`         | `object`                         | Core serial number.                                        | `B1049`, `B1051`, …                                 |
+| `Longitude`      | `float64`                        | Launch site longitude.                                     | −120.61 … −80.58                                    |
+| `Latitude`       | `float64`                        | Launch site latitude.                                      | 28.56 … 34.63                                       |
+
+
+## Attribution & license
+
 - SpaceX API data courtesy of SpaceX.  
-- Wikipedia tables are available under **CC BY-SA**; cite the specific pages if used.
 
-**Reproducibility**  
+Shared **for educational purposes**. If you reuse it in reports/public outputs, please add proper attribution to original sources where applicable. Code in this repo can be released under **MIT** (or your preferred license).
+
+## Contributing
+
+PRs and issues welcome! Ideas:
+
+- Normalize `Outcome` into separate fields
+
+- Add EDA notebooks
+
+- Improve `PayloadMass` imputation strategy
+
+
+
+
+# Reproducibility
 - See notebooks under `labs/` (e.g., `01_data_collection.ipynb`, `02_data_wrangling.ipynb`) for code that fetches and builds this dataset.  
-- If your environment needs secrets/tokens, copy `.env.example` → `.env` and fill in values (do not commit `.env`).
+
