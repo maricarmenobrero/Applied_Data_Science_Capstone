@@ -62,6 +62,7 @@ PRs and issues welcome! Ideas:
 
 - See notebook under `labs/jupyter-labs-spacex-data-collection-api.ipynb` for code that fetches and builds this dataset.  
 
+---
 
 # `processed/spacex_web_scraped.csv`
 
@@ -113,3 +114,66 @@ A clean CSV with historical SpaceX launch data scraped from Wikipedia as part of
 - **Data attribution**: Derived from Wikipedia contributors’ launch list pages.
 
 - **License**: Follow Wikipedia’s content licensing for downstream use. If you publish derivatives, include appropriate attribution to Wikipedia contributors and note modifications.
+
+---
+
+# `processed/dataset_part_2.csv`
+
+This CSV is the direct output of **Lab 2: Data Wrangling** from the Capstone **“SpaceX Falcon 9 First Stage Landing Prediction”** (Module 1 – Introduction).
+
+It consolidates launches and creates a binary landing label to be used in the next parts of the project.
+
+
+## What’s inside
+
+A table of **Falcon 9** launches with rocket, payload, orbit, launch site and mission outcome fields, plus a derived target:
+
+- **`Class` (0/1)** — Binary landing label created from `Outcome`:
+  - `1` = landing considered **successful** (per the lab’s rules)
+  - `0` = **failed** or **no attempt**
+
+> ***Note***: This file follows the lab’s data-wrangling rules (e.g., excluding certain intermediate categories and normalizing simple text fields). It is intended for educational use in the Capstone.
+
+
+## Data dictionary
+
+| Column           | Type    | Description                                                                                  |
+|------------------|---------|----------------------------------------------------------------------------------------------|
+| `FlightNumber`   | int     | Sequential flight number within the Falcon 9 subset.                                         |
+| `Date`           | string  | Launch date as text (parseable to datetime/UTC).                                             |
+| `BoosterVersion` | string  | Booster model/version (e.g., *Falcon 9 Block 5*).                                            |
+| `PayloadMass`    | float   | Payload mass in **kg** (may contain missing values).                                         |
+| `Orbit`          | string  | Target orbit (e.g., LEO, ISS, GTO, SSO, …).                                                  |
+| `LaunchSite`     | string  | Launch complex/platform (e.g., CCAFS SLC 40, KSC LC 39A, VAFB SLC 4E).                       |
+| `Outcome`        | string  | Textual landing outcome (e.g., `True ASDS`, `False ASDS`, `None None`).                      |
+| `Flights`        | int     | Cumulative flight count of the same core at that mission.                                    |
+| `GridFins`       | bool    | Whether the booster used grid fins.                                                          |
+| `Reused`         | bool    | Whether the core was reused on that mission.                                                 |
+| `Legs`           | bool    | Whether the booster deployed landing legs.                                                   |
+| `LandingPad`     | string  | Landing zone/drone-ship identifier (OCISLY, JRTI-2, LZ-1, etc.).                             |
+| `Block`          | float   | Core Block version (1–5).                                                                    |
+| `ReusedCount`    | float   | Total reuse count of the core up to that launch.                                             |
+| `Serial`         | string  | Core serial number (e.g., B1049).                                                            |
+| `Longitude`      | float   | Longitude of the launch site.                                                                |
+| `Latitude`       | float   | Latitude of the launch site.                                                                 |
+| `Class`          | 0/1     | **Target**: landing success label derived from `Outcome` (1 = success, 0 = failure/no attempt). |
+
+
+## How this dataset was built (per the lab)
+
+1. Loaded the curated Falcon 9 launches assembled in Lab 1 (data collection).
+2. Performed basic cleaning/selection of relevant fields.
+3. Computed counts/frequencies by orbit (often **excluding GTO** as it’s a transfer orbit).
+4. Converted `Outcome` into a binary **`Class`** label (success vs. non-success) using a set of “bad outcomes” defined in the lab.
+5. Saved the result as `dataset_part_2.csv` for downstream EDA/modeling.
+
+## Provenance & license
+
+- **Provenance**: Produced as the final artifact of Lab 2 (Data Wrangling) in the Capstone *SpaceX Falcon 9 First Stage Landing Prediction* (Module 1 – Introduction).
+
+- **Data sources**: Derived from SpaceX/Wikipedia public information as guided by the course.
+
+- **Intended use**: Educational purposes within the Capstone. If you reuse it publicly, please include appropriate attribution to the original sources and note any modifications.
+
+
+
