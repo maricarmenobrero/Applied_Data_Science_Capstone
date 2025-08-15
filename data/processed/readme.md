@@ -175,5 +175,79 @@ A table of **Falcon 9** launches with rocket, payload, orbit, launch site and mi
 
 - **Intended use**: Educational purposes within the Capstone. If you reuse it publicly, please include appropriate attribution to the original sources and note any modifications.
 
+---
+
+# `processed/dataset_part_3.csv`
+
+**Final feature matrix** produced in **Lab 05 (EDA, visualization, and data preparation)** of the Capstone *SpaceX Falcon 9 First Stage Landing Prediction*.
+
+This CSV contains features **ready for modeling** after:
+- selecting relevant variables,
+- applying **one-hot encoding** to categorical columns (`Orbit`, `LaunchSite`, `LandingPad`, `Serial`),
+- converting boolean flags (`GridFins`, `Reused`, `Legs`) to numeric,
+- casting the whole feature table to **`float64`**.
+
+> **Note:** This file **does not include the target** `Class`. Load it from the previous lab output (e.g., `dataset_part_2.csv`) and align indices before training.
+
+
+## What’s inside
+
+- **Numeric base features**: e.g., `FlightNumber`, `PayloadMass`, `Flights`, `Block`, `ReusedCount` (stored as `float64`).
+- **Boolean flags (now numeric 0/1)**: `GridFins`, `Reused`, `Legs` (also `float64` after the final cast).
+- **One-hot columns (0/1)** using these prefixes:
+  - `Orbit_*` — orbit category (LEO, GTO, SSO, ISS, …)
+  - `LaunchSite_*` — launch complex (CCAFS SLC 40, KSC LC 39A, VAFB SLC 4E)
+  - `LandingPad_*` — landing zone/drone-ship (LZ-1, OCISLY, JRTI, …)
+  - `Serial_*` — core serial (B10xx…)
+
+All columns are numeric to plug directly into scikit-learn pipelines.
+
+
+## Data dictionary (summary)
+
+| Column / prefix     | Type    | Meaning                                                                 |
+|---------------------|---------|-------------------------------------------------------------------------|
+| `FlightNumber`      | float64 | Sequential flight number within the Falcon 9 subset.                    |
+| `PayloadMass`       | float64 | Payload mass (kg).                                                      |
+| `Flights`           | float64 | Cumulative flights of the same core up to that mission.                 |
+| `Block`             | float64 | Core Block version (1–5).                                              |
+| `ReusedCount`       | float64 | Total reuse count of the core up to that launch.                        |
+| `GridFins`          | float64 | 0/1 — whether the booster used grid fins.                               |
+| `Reused`            | float64 | 0/1 — whether the core was reused on that mission.                      |
+| `Legs`              | float64 | 0/1 — whether landing legs were deployed.                               |
+| `Orbit_*`           | float64 | One-hot columns for each orbit category.                                |
+| `LaunchSite_*`      | float64 | One-hot columns for each launch site.                                   |
+| `LandingPad_*`      | float64 | One-hot columns for each landing zone/drone-ship.                       |
+| `Serial_*`          | float64 | One-hot columns for core serial numbers.                                |
+
+> Exact column count depends on the categories present in your data (each unique category creates one dummy column).
+
+## How this dataset was built (Lab 05 steps)
+
+1. Started from the cleaned dataset of Falcon 9 launches (from previous labs).
+
+2. Performed EDA and simple visual checks (success by orbit, launch site, mass trends).
+
+3. Created a feature subset (`features`) with numeric + categorical inputs.
+
+4. Applied `pd.get_dummies()` to `Orbit`, `LaunchSite`, `LandingPad`, `Serial`.
+
+5. Converted booleans to numeric and casted the entire feature table to float64.
+
+## Limitations
+
+- The target `Class` is not included here; join it from the previous lab output.
+
+- `Serial_*` can create many columns; consider regularization or feature selection for some models.
+
+- Data reflects the course material; it may not include the very latest launches.
+
+## Provenance & license
+
+- Produced in Lab 05 of the Capstone SpaceX Falcon 9 First Stage Landing Prediction (Module 2).
+
+- Data derived from SpaceX/Wikipedia/public sources as curated in the course — for educational use.
+
+- If you publish results, please add appropriate attribution and note any modifications.
 
 
