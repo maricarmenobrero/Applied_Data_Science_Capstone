@@ -18,9 +18,5 @@ This repository contains my **coursework for the Applied Data Science Capstone**
 
 - `requirements.txt` – Python dependencies
 
-## Getting started
 
-Clone the repo, create a virtual environment (Python 3.10+), `pip install -r requirements.txt`, and open the notebooks in Jupyter.
-
-Feedback is welcome—feel free to open issues or submit pull requests.
 
